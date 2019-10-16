@@ -23,44 +23,46 @@ class Util{
         $models = config('crud.models');
         $protectedColumns = ['id', 'created_at', 'updated_at'];
         $nonCrudProperties = ['_token',  '_method'];
-        foreach($models as $modelKey => $model){
-            if(is_string($model)){
-                $model = ['model' => $model, 'show' => [], 'edit' => [], 'create' => [], 'index' => [], 'update' => [], 'store' => []];
-            }
-            foreach(['show', 'edit', 'create', 'index'] as $method){
-                if(!isset($model[$method])){
-                    $model[$method] = [];
+        if($models){
+            foreach($models as $modelKey => $model){
+                if(is_string($model)){
+                    $model = ['model' => $model, 'show' => [], 'edit' => [], 'create' => [], 'index' => [], 'update' => [], 'store' => []];
                 }
-                foreach(['include', 'exclude', 'readonly'] as $verb){
-                    if(!isset($model[$method][$verb])){
-                        $model[$method][$verb] = [];
+                foreach(['show', 'edit', 'create', 'index'] as $method){
+                    if(!isset($model[$method])){
+                        $model[$method] = [];
+                    }
+                    foreach(['include', 'exclude', 'readonly'] as $verb){
+                        if(!isset($model[$method][$verb])){
+                            $model[$method][$verb] = [];
+                        }
                     }
                 }
-            }
-            foreach(['update', 'store'] as $method){
-                if(!isset($model[$method])){
-                    $model[$method] = [];
-                }
-                foreach(['validation', 'exclude'] as $verb){
-                    if(!isset($model[$method][$verb])){
-                        $model[$method][$verb] = [];
+                foreach(['update', 'store'] as $method){
+                    if(!isset($model[$method])){
+                        $model[$method] = [];
+                    }
+                    foreach(['validation', 'exclude'] as $verb){
+                        if(!isset($model[$method][$verb])){
+                            $model[$method][$verb] = [];
+                        }
                     }
                 }
-            }
 
-            $model['edit']['readonly'] = array_merge($model['edit']['readonly'] ?? [], $protectedColumns);
+                $model['edit']['readonly'] = array_merge($model['edit']['readonly'] ?? [], $protectedColumns);
 
-            foreach($protectedColumns as $protectedColumn){
-                if( ($k = array_search($protectedColumn, $model['create']['include'])) !== false ){
-                    unset($model['create']['include'][$k]);
-                }else{
-                    $model['create']['exclude'] = array_merge($model['create']['exclude'], [$protectedColumn]);
+                foreach($protectedColumns as $protectedColumn){
+                    if( ($k = array_search($protectedColumn, $model['create']['include'])) !== false ){
+                        unset($model['create']['include'][$k]);
+                    }else{
+                        $model['create']['exclude'] = array_merge($model['create']['exclude'], [$protectedColumn]);
+                    }
                 }
-            }
 
-            $model['store']['exclude'] = array_merge($model['store']['exclude'], $protectedColumns, $nonCrudProperties);
-            $model['update']['exclude'] = array_merge($model['update']['exclude'], $protectedColumns, $nonCrudProperties);
-            $models[$modelKey] = $model;
+                $model['store']['exclude'] = array_merge($model['store']['exclude'], $protectedColumns, $nonCrudProperties);
+                $model['update']['exclude'] = array_merge($model['update']['exclude'], $protectedColumns, $nonCrudProperties);
+                $models[$modelKey] = $model;
+            }
         }
 
         return $models;
