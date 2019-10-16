@@ -1,0 +1,33 @@
+{
+    "name": "webbtj/crud",
+    "description": "Automatically add crud routes/methods to any model.",
+    "keywords": ["laravel", "crud"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "TJ Webb",
+            "email": "webb.tj@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "doctrine/dbal": "^2.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webbtj\\Crud\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Webbtj\\Crud\\CrudServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
