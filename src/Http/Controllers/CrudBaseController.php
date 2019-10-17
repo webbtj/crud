@@ -1,32 +1,29 @@
 <?php
 
-namespace Webbtj\Crud;
+namespace Webbtj\Crud\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-// use Webbtj\Crud\Util;
-// use Webbtj\Crud\Field;
-// use Webbtj\Crud\CrudControllerTrait;
 use Illuminate\Support\Facades\Schema;
 use DB;
 use Doctrine\DBAL\Types\Type;
 
-class CrudController extends Controller
+class CrudBaseController extends Controller
 {
     use CrudControllerTrait;
 
     public function index()
     {
         $models = $this->model->paginate();
-        return $this->view('crud::index', compact('models'));
+        return $models;
     }
 
     public function create()
     {
-        return $this->view('crud::create');
+        return;
     }
 
     public function store(Request $request)
@@ -37,20 +34,19 @@ class CrudController extends Controller
             $model->$k = $v;
         }
         $model->save();
-
-        return redirect()->route($this->routeRoot . '.index')->with('message', 'Item created successfully.');
+        return $model;
     }
 
     public function show($id)
     {
         $model = $this->model->findOrFail($id);
-        return $this->view('crud::show', compact('model'));
+        return $model;
     }
 
     public function edit($id)
     {
         $model = $this->model->findOrFail($id);
-        return $this->view('crud::edit', compact('model'));
+        return $model;
     }
 
     public function update(Request $request, $id)
@@ -61,14 +57,12 @@ class CrudController extends Controller
             $model->$k = $v;
         }
         $model->save();
-
-		return redirect()->route($this->routeRoot . '.index')->with('message', 'Item updated successfully.');
+        return $model;
 	}
 
     public function destroy($id)
 	{
-		$this->model->destroy($id);
-		return redirect()->route($this->routeRoot . '.index')->with('message', 'Item deleted successfully.');
+		return $this->model->destroy($id);
 	}
 
 

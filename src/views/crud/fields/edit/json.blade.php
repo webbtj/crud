@@ -6,7 +6,7 @@
             class="json_text"
             name="{{$fieldColumnName}}"
             id="jsontext_{{$fieldColumnName}}"
-            >{{$value}}</textarea>
+            >{!! is_string($value) ? $value : json_encode($value ?? new stdClass())  !!}</textarea>
 
         <div id="jsoneditor_{{$fieldColumnName}}" class="json_editor"></div>
 
@@ -20,7 +20,7 @@
                     }
                 }
                 editor = new JSONEditor(this.container, this.options)
-                initial = {!! $value ?? '{}' !!}
+                initial = {!! is_string($value) ? $value : json_encode($value ?? new stdClass())  !!}
                 editor.set(initial)
             })("{{$fieldColumnName}}");
 

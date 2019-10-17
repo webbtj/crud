@@ -1,11 +1,13 @@
 <?php
 
-namespace Webbtj\Crud;
+namespace Webbtj\Crud\Http\Controllers;
 
 use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Webbtj\Crud\Util;
+use Webbtj\Crud\Field;
 
 trait CrudControllerTrait{
 
@@ -20,7 +22,8 @@ trait CrudControllerTrait{
         $_routeRoot = null;
         $_modelName = null;
         Util::crud_models()->each(function($class, $resource) use(&$_model, &$_routeRoot, &$_modelName){
-            if(Str::startsWith(Route::currentRouteName(), $resource)){
+            $currentRouteName = str_replace('api.', '', Route::currentRouteName());
+            if(Str::startsWith($currentRouteName, $resource)){
                 $_model = new $class();
                 $_routeRoot = $resource;
                 $_modelName = class_basename($class);

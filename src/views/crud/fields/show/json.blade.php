@@ -14,7 +14,7 @@
                     }
                 }
                 editor = new JSONEditor(this.container, this.options)
-                initial = {!! $value ?? '{}' !!}
+                initial = {!! is_string($value) ? $value : json_encode($value ?? new stdClass())  !!}
                 editor.set(initial)
             })("{{$fieldColumnName}}");
 

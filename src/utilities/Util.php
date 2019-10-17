@@ -95,7 +95,9 @@ class Util{
             if($key == $field->getColumnName()){
                 switch ($field->getType()) {
                     case 'array':
-                        $value = implode(",", $value);
+                        if(is_array($value)){
+                            $value = implode(",", $value);
+                        }
                         break;
                 }
             }

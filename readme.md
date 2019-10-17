@@ -17,9 +17,11 @@ and easy.
 
 You can add validation and some other stuff like readonly/inclusion/exclusion
 declarations in the config as well. You should be able to get simple crud up and
-running in a few minutes. Right now it just uses the `web` middleware, but I'll
+running in a few minutes. ~Right now it just uses the `web` middleware, but I'll
 add the ability to add your own middleware, and add api middleware automatically
-in the future. Probably a good idea to take a look through the config file that
+in the future.~ *You can now inject middleware to the web and api routes, and
+the api routes are there automatically. (There might not be proper json error
+responses yet)* Probably a good idea to take a look through the config file that
 gets published to get an idea on how that works.
 
 Oh, and the properties are all read from the db schema the sameish way
@@ -28,7 +30,7 @@ those. You also can create copies of any views in your `views` directory under
 singular-downcase version of the model name (example `car`) and it will pick
 your custom ones first. Of course when you publish the views it will put them
 all under `crud`, those are the generic ones that apply to all models when they
-don't have a custom version of the given view.
+don't have a custom version of the given view.  
 
 ### Installation
 1. Add my github to the `repositories` section of your composer.json. You might
@@ -49,6 +51,7 @@ you want.
 ### TODO
 * [ ] Better documentation
 * [ ] Testing
-* [ ] Allow users to inject middleware
+* [x] Allow users to inject middleware
+* [x] API routing
 * [ ] Command to build _real_ controllers
 * [ ] Command to build _real_ views

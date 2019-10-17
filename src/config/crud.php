@@ -38,6 +38,10 @@ return [
                         'last_name' => 'required',
                     ],
                 ]
+                'middleware' => [
+                    'web' => ['customWebMiddleware'],
+                    'api' => ['customApiMiddleware']
+                ]
             ]
             */
 
