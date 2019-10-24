@@ -12,10 +12,12 @@ class Field {
     private $displayName;
     private $options;
     private $readOnly;
+    private $views;
 
-    public function __construct(String $columnName, String $className, String $type = null, String $tableName = null){
+    public function __construct(String $columnName, String $className, String $type = null, String $tableName = null, Array $views = null){
         $this->setColumnName($columnName);
         $this->setClassName($className);
+        $this->setViews($views);
         if($type){
             $this->setType($type);
         }
@@ -132,5 +134,12 @@ class Field {
 
     public function getReadOnly(){
         return $this->readOnly;
+    }
+
+    public function setViews(Array $views){
+        $this->views = $views;
+    }
+    public function getViews(){
+        return $this->views;
     }
 }

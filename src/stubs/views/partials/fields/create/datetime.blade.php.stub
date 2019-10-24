@@ -1,0 +1,27 @@
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>{FIELD_DISPLAY_NAME}:</strong>
+
+                        <div class="input-group date" id="datetimepicker-{FIELD_MACHINE_NAME}">
+                            <input
+                                type="text"
+                                name="{FIELD_MACHINE_NAME}"
+                                class="form-control"
+                                data-target="#datetimepicker-{FIELD_MACHINE_NAME}"
+                                data-toggle="datetimepicker"
+                                placeholder="{FIELD_DISPLAY_NAME}">
+
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#datetimepicker-{FIELD_MACHINE_NAME}').datetimepicker({
+                                format: 'YYYY-MM-DD HH:mm:ss',
+                            });
+                        });
+                    </script>
+                </div>

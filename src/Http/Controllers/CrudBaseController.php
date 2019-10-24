@@ -13,7 +13,7 @@ use Doctrine\DBAL\Types\Type;
 
 class CrudBaseController extends Controller
 {
-    use CrudControllerTrait;
+    use \Webbtj\Crud\Traits\CrudControllerTrait;
 
     public function index()
     {

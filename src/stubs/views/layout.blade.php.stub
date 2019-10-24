@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <title>Autocrud</title>
+    <title>Create Read Update Delete</title>
 
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.4/jsoneditor.min.js"

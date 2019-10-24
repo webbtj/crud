@@ -1,0 +1,2 @@
+            <strong>{FIELD_DISPLAY_NAME}:</strong>
+            {{{MODEL_VARIABLE}}}

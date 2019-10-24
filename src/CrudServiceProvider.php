@@ -17,7 +17,9 @@ class CrudServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->commands([
+            'Webbtj\Crud\Commands\Publisher'
+        ]);
     }
 
     /**

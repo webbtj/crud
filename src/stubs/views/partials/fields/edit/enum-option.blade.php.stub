@@ -1,0 +1,1 @@
+                            <option value="{FIELD_OPTION}" {{{MODEL_VARIABLE} == '{FIELD_OPTION}' ? 'SELECTED' : ''}}>{FIELD_OPTION}</option>

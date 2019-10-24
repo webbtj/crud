@@ -1,0 +1,57 @@
+<?php
+
+namespace {APP_NAMESPACE}Http\Controllers\Api;
+
+use Illuminate\Http\Request;
+use {APP_NAMESPACE}Http\Controllers\Controller;
+use {MODEL_NAMESPACE};
+
+class {MODEL}Controller extends Controller
+{
+    protected ${VARIABLE};
+
+    public function __construct()
+    {
+        $this->{VARIABLE} = new {MODEL}();
+    }
+
+    public function index()
+    {
+        return $this->{VARIABLE}->paginate();
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate({STORE_VALIDATION});
+        $inputs = $request->except({STORE_EXCEPTIONS});
+
+        foreach($inputs as $k => $v){
+            $this->{VARIABLE}->$k = $v;
+        }
+        $this->{VARIABLE}->save();
+        return $this->{VARIABLE};
+    }
+
+    public function show($id)
+    {
+        return $this->{VARIABLE}->findOrFail($id);
+    }
+
+    public function update(Request $request, $id)
+	{
+        $request->validate({UPDATE_VALIDATION});
+        $inputs = $request->except({UPDATE_EXCEPTIONS});
+
+		${VARIABLE} = $this->{VARIABLE}->findOrFail($id);
+        foreach($inputs as $k => $v){
+            ${VARIABLE}->$k = $v;
+        }
+        ${VARIABLE}->save();
+        return ${VARIABLE};
+	}
+
+    public function destroy($id)
+	{
+        return $this->{VARIABLE}->destroy($id);
+	}
+}

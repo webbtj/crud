@@ -1,0 +1,6 @@
+            <strong>{FIELD_DISPLAY_NAME}:</strong>
+            @if({MODEL_VARIABLE})
+                <span class="no-btn btn btn-xs btn-info">True</span>
+            @else
+                <span class="no-btn btn btn-xs btn-danger">False</span>
+            @endif

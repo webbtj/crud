@@ -1,0 +1,4 @@
+                            <div>
+                                <input id="{FIELD_MACHINE_NAME}-{FIELD_OPTION_MACHINE}" type="checkbox" name="{FIELD_MACHINE_NAME}[]" value="{FIELD_OPTION}" {{in_csv('{FIELD_OPTION}', {MODEL_VARIABLE}) ? 'checked' : ''}} />
+                                <label for="{FIELD_MACHINE_NAME}-{FIELD_OPTION_MACHINE}">{FIELD_OPTION}</label>
+                            </div>

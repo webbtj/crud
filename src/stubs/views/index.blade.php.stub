@@ -1,0 +1,36 @@
+@extends('crud-layout')
+@section('header')
+<div class="row">
+    <div class="col-lg-12 margin-tb">
+        <div class="pull-left">
+            <h2>All {MODEL_PLURAL}</h2>
+        </div>
+        <div class="pull-right">
+            <a class="btn btn-success" href="{{ route('{ROUTES}.create') }}"> Create New {MODEL}</a>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('content')
+<table class="table table-bordered">
+    <tr>
+{INDEX_HEADERS}
+        <th width="280px">Action</th>
+    </tr>
+    @foreach (${VARIABLE_PLURAL} as ${VARIABLE})
+        <tr>
+{INDEX_COLUMNS}
+            <td>
+                <form action="{{ route('{ROUTES}.destroy', ${VARIABLE}->id) }}" method="POST">
+                    <a class="btn btn-info" href="{{ route('{ROUTES}.show', ${VARIABLE}->id) }}">Show</a>
+                    <a class="btn btn-primary" href="{{ route('{ROUTES}.edit', ${VARIABLE}->id) }}">Edit</a>
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this item?');" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    @endforeach
+</table>
+@endsection

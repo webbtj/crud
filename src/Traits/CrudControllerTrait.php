@@ -1,6 +1,6 @@
 <?php
 
-namespace Webbtj\Crud\Http\Controllers;
+namespace Webbtj\Crud\Traits;
 
 use DB;
 use Illuminate\Support\Str;
@@ -18,12 +18,20 @@ trait CrudControllerTrait{
 
     public function __construct()
     {
+        $this->populateProperties();
+    }
+
+    public function populateProperties($currentRouteName = null){
         $_model = null;
         $_routeRoot = null;
         $_modelName = null;
-        Util::crud_models()->each(function($class, $resource) use(&$_model, &$_routeRoot, &$_modelName){
-            $currentRouteName = str_replace('api.', '', Route::currentRouteName());
-            if(Str::startsWith($currentRouteName, $resource)){
+        Util::crud_models()->each(function($class, $resource) use(&$_model, &$_routeRoot, &$_modelName, $currentRouteName){
+            if(is_null($currentRouteName)){
+                $currentRouteName = str_replace('api.', '', Route::currentRouteName());
+            }
+            $resourceCompare = preg_replace('/[^A-Za-z0-9]/', '', $resource);
+            $currentRouteNameCompare = preg_replace('/[^A-Za-z0-9]/', '', $currentRouteName);
+            if(Str::startsWith($currentRouteNameCompare, $resourceCompare)){
                 $_model = new $class();
                 $_routeRoot = $resource;
                 $_modelName = class_basename($class);

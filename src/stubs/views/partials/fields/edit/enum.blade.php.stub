@@ -1,0 +1,8 @@
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>{FIELD_DISPLAY_NAME}:</strong>
+                        <select name="{FIELD_MACHINE_NAME}" class="form-control">
+{FIELD_OPTIONS}
+                        </select>
+                    </div>
+                </div>

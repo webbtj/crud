@@ -1,0 +1,9 @@
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>{FIELD_DISPLAY_NAME}:</strong>
+                        <select name="{FIELD_MACHINE_NAME}" class="form-control">
+                            <option {{{MODEL_VARIABLE} ? 'SELECTED' : ''}} value="1">True</option>
+                            <option {{{MODEL_VARIABLE} ? '' : 'SELECTED'}} value="0">False</option>
+                        </select>
+                    </div>
+                </div>

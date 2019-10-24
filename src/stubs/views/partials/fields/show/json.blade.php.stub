@@ -1,0 +1,19 @@
+            <strong>{FIELD_DISPLAY_NAME}:</strong>
+
+            <div id="jsoneditor_{FIELD_MACHINE_NAME}" class="json_editor"></div>
+
+            <script>
+                (function(uid){
+                    container = document.getElementById("jsoneditor_" + uid)
+                    options = {
+                        modes: ["tree"],
+                        onChangeText: function(jsonString){
+                            document.getElementById("jsontext_" + uid).value = jsonString;
+                        }
+                    }
+                    editor = new JSONEditor(this.container, this.options)
+                    initial = {!! is_string({MODEL_VARIABLE}) ? {MODEL_VARIABLE} : json_encode({MODEL_VARIABLE} ?? new stdClass())  !!}
+                    editor.set(initial)
+                })("{FIELD_MACHINE_NAME}");
+
+            </script>
