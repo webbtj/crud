@@ -33,25 +33,28 @@ class Publisher extends Command
     public function handle()
     {
         $models = $this->option('model');
-        if(!$models){
-            $models = collect(Util::crud_config())->pluck('model')->toArray();
+        if (!$models) {
+            $models = collect(Util::crudConfig())->pluck('model')->toArray();
         }
         $types = $this->option('type');
-        if(!$types){
+        if (!$types) {
             $types = ['controller', 'api.controller', 'views'];
         }
 
-        foreach($models as $model){
+        foreach ($models as $model) {
             $baseModelName = class_basename($model);
             $routes = strtolower(Str::plural($baseModelName));
             $this->populateProperties($routes);
 
-            if(!$this->option('type')){
-                $this->stdOut['config'][] = sprintf("You should remove the config entries for %s in config/crud.php to avoid collisions.", $model);
+            if (!$this->option('type')) {
+                $this->stdOut['config'][] = sprintf(
+                    "You should remove the config entries for %s in config/crud.php to avoid collisions.",
+                    $model
+                );
             }
 
             $this->resolveModel($model);
-            foreach($types as $type){
+            foreach ($types as $type) {
                 $type = Str::singular(strtolower(preg_replace('/[^A-Za-z0-9]/', '', $type)));
                 switch ($type) {
                     case 'controller':
@@ -97,49 +100,39 @@ class Publisher extends Command
         $config = "\e[0;35;40m";
         $code = "\e[0;30;47m";
         $closing = "\e[0m";
-        foreach(['success', 'warning', 'error'] as $messageType){
-            if(!empty($this->stdOut[$messageType])){
+        foreach (['success', 'warning', 'error'] as $messageType) {
+            if (!empty($this->stdOut[$messageType])) {
                 echo sprintf("\n%s:\n\n", strtoupper(Str::plural($messageType)));
-                foreach($this->stdOut[$messageType] as $string){
+                foreach ($this->stdOut[$messageType] as $string) {
                     echo sprintf("%s%s%s\n", $$messageType, $string, $closing);
                 }
                 echo "\n\n";
             }
         }
-        if(!empty($this->stdOut['routes']['web']) || !empty($this->stdOut['routes']['api'])){
+        if (!empty($this->stdOut['routes']['web']) || !empty($this->stdOut['routes']['api'])) {
             echo "\nTODO:\n\n";
         }
 
-        if(!empty($this->stdOut['config'])){
-            foreach($this->stdOut['config'] as $string){
+        if (!empty($this->stdOut['config'])) {
+            foreach ($this->stdOut['config'] as $string) {
                 echo sprintf("%s%s%s\n", $config, $string, $closing);
             }
         }
 
-        foreach($this->stdOut['routes'] as $routeType => $resources){
-            if(!empty($resources)){
-                echo sprintf("\n%s%s been created. You should add the following to your routes/%s.php if you haven't already.",
-                    $routes, count($resources) > 1 ? "New $routeType controllers have" : "A new $routeType controller has" , $routeType
+        foreach ($this->stdOut['routes'] as $routeType => $resources) {
+            if (!empty($resources)) {
+                echo sprintf(
+                    "\n%s%s been created. You should add the following to your routes/%s.php if you haven't already.",
+                    $routes,
+                    count($resources) > 1 ? "New $routeType controllers have" : "A new $routeType controller has",
+                    $routeType
                 );
                 echo "$code\n";
-                foreach($resources as $resource){
+                foreach ($resources as $resource) {
                     echo "\n\t$resource";
                 }
                 echo "\n$closing\n";
             }
         }
-
-        /*$bgs = range(60, 60);
-        $as = range(0, 1);
-        $bs = range(0, 60);
-
-        foreach($bgs as $bg){
-            foreach($as as $a){
-                foreach($bs as $b){
-                    // echo sprintf("\033[%dm\033[%d;%dm\n\n\t%d;%d on %d\n\033[0m", $bg, $a, $b, $a, $b, $bg);
-                    echo sprintf("\033[%d;%dm\n\n\t%d;%d on %d\n\033[0m", $a, $b, $a, $b, $bg);
-                }
-            }
-        }*/
     }
 }

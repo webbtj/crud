@@ -36,14 +36,14 @@ class CrudWebController extends CrudBaseController
     }
 
     public function update(Request $request, $id)
-	{
+    {
         $model = parent::update($request, $id);
-		return redirect()->route($this->routeRoot . '.index')->with('message', 'Item updated successfully.');
-	}
+        return redirect()->route($this->routeRoot . '.index')->with('message', 'Item updated successfully.');
+    }
 
     public function destroy($id)
-	{
+    {
         $destroyed = parent::destroy($id);
-		return redirect()->route($this->routeRoot . '.index')->with('message', 'Item deleted successfully.');
-	}
+        return redirect()->route($this->routeRoot . '.index')->with('message', 'Item deleted successfully.');
+    }
 }

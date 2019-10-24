@@ -1,11 +1,13 @@
 <?php
 
 namespace Webbtj\Crud;
+
 use Illuminate\Support\Str;
 use Webbtj\Crud\Util;
 use Doctrine\DBAL\Types\Type;
 
-class Field {
+class Field
+{
     private $columnName;
     private $type;
     private $className;
@@ -14,29 +16,38 @@ class Field {
     private $readOnly;
     private $views;
 
-    public function __construct(String $columnName, String $className, String $type = null, String $tableName = null, Array $views = null){
+    public function __construct(
+        String $columnName,
+        String $className,
+        String $type = null,
+        String $tableName = null,
+        Array $views = null
+    ) {
         $this->setColumnName($columnName);
         $this->setClassName($className);
         $this->setViews($views);
-        if($type){
+        if ($type) {
             $this->setType($type);
         }
-        if( ('array' == $this->type || 'simple_array' == $this->type || 'enum' == $this->type) && $tableName){
-            $this->options = Util::enum_options($tableName, $columnName);
+        if (('array' == $this->type || 'simple_array' == $this->type || 'enum' == $this->type) && $tableName) {
+            $this->options = Util::enumOptions($tableName, $columnName);
         }
     }
 
-    public function setColumnName(String $columnName){
+    public function setColumnName(String $columnName)
+    {
         $this->columnName = $columnName;
         $this->displayName = snake_to_title($columnName);
     }
-    public function getColumnName(){
+    public function getColumnName()
+    {
         return $this->columnName;
     }
 
-    private function setType(String $type){
+    private function setType(String $type)
+    {
         $type = strtolower($type);
-        if(Str::startsWith($type, 'decimal')){
+        if (Str::startsWith($type, 'decimal')) {
             $type = 'decimal';
         }
 
@@ -105,41 +116,50 @@ class Field {
                 break;
         }
     }
-    public function getType(){
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function setClassName(String $className){
+    public function setClassName(String $className)
+    {
         $this->className = $className;
         $types = array_flip(Type::getTypesMap());
-        if(array_key_exists($className, $types)){
+        if (array_key_exists($className, $types)) {
             $this->setType($types[$className]);
         }
     }
-    public function getClassName(){
+    public function getClassName()
+    {
         return $this->className;
     }
 
-    public function getDisplayName(){
+    public function getDisplayName()
+    {
         return $this->displayName;
     }
 
-    public function getOptions(){
+    public function getOptions()
+    {
         return $this->options;
     }
 
-    public function setReadOnly(bool $readOnly){
+    public function setReadOnly(bool $readOnly)
+    {
         $this->readOnly = $readOnly;
     }
 
-    public function getReadOnly(){
+    public function getReadOnly()
+    {
         return $this->readOnly;
     }
 
-    public function setViews(Array $views){
+    public function setViews(Array $views)
+    {
         $this->views = $views;
     }
-    public function getViews(){
+    public function getViews()
+    {
         return $this->views;
     }
 }

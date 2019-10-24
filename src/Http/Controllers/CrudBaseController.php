@@ -28,9 +28,9 @@ class CrudBaseController extends Controller
 
     public function store(Request $request)
     {
-		$inputs = $this->validInputs($request, 'store');
+        $inputs = $this->validInputs($request, 'store');
         $model = new $this->model;
-        foreach($inputs as $k => $v){
+        foreach ($inputs as $k => $v) {
             $model->$k = $v;
         }
         $model->save();
@@ -50,20 +50,18 @@ class CrudBaseController extends Controller
     }
 
     public function update(Request $request, $id)
-	{
+    {
         $inputs = $this->validInputs($request, 'update');
-		$model = $this->model->findOrFail($id);
-        foreach($inputs as $k => $v){
+        $model = $this->model->findOrFail($id);
+        foreach ($inputs as $k => $v) {
             $model->$k = $v;
         }
         $model->save();
         return $model;
-	}
+    }
 
     public function destroy($id)
-	{
-		return $this->model->destroy($id);
-	}
-
-
+    {
+        return $this->model->destroy($id);
+    }
 }

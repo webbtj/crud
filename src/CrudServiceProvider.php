@@ -51,15 +51,17 @@ class CrudServiceProvider extends ServiceProvider
         ], 'crud-views');
 
         // register crud model routes
-        collect(Util::crud_config())->each(function($model){
+        collect(Util::crudConfig())->each(function ($model) {
             $classBasename = class_basename($model['model']);
             $resource = Str::kebab(Str::plural($classBasename), '-');
             $middleware = array_merge(['web'], $model['middleware']['web'] ?? []);
             Route::resource($resource, 'Webbtj\Crud\Http\Controllers\CrudWebController')->middleware($middleware);
 
-            Route::prefix('api')->name('api.')->group(function() use($model, $resource){
+            Route::prefix('api')->name('api.')->group(function () use ($model, $resource) {
                 $middleware = array_merge(['api'], $model['middleware']['api'] ?? []);
-                Route::resource($resource, 'Webbtj\Crud\Http\Controllers\CrudApiController')->except(['create', 'edit'])->middleware($middleware);
+                Route::resource($resource, 'Webbtj\Crud\Http\Controllers\CrudApiController')
+                    ->except(['create', 'edit'])
+                    ->middleware($middleware);
             });
         });
     }

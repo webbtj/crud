@@ -25,14 +25,14 @@ class CrudApiController extends CrudBaseController
     }
 
     public function update(Request $request, $id)
-	{
+    {
         $model = parent::update($request, $id);
         return $model;
-	}
+    }
 
     public function destroy($id)
-	{
+    {
         $destroyed = parent::destroy($id);
         return $destroyed;
-	}
+    }
 }
