@@ -1,71 +1,30 @@
-## CRUD
-#### for Laravel
-by webbtj  
+# Laravel Crud
 
-I promise I'll make a better readme before I publish this.  
+Laravel Crud is a package for automatically adding CRUD (Create, Read, Update,
+Delete) views, web controllers and API controllers for any model as rapidly as
+possible.
 
-### Purpose?
-It's a package to automatically add crud routes/controller functionality
-without the need to manually create views, controller, etc. Why? I had some
-free time at work.  
+## Prototyping
 
-So with this, you can just install the package, publish the config file, create
-basic (blank) models (`php artisan make:model Car` for example), create/run
-migrations to build the schema for your models and add the class names of each
-model you want crud for to the config file. Bam! It's really just that quick
-and easy.
+Laravel Crud let's you quickly create all of the views and controllers you need
+for the full CRUD operation set (create, read, update, delete), including an
+index with just a configuration file. Laravel Crud also creates and registers
+routes for you automatically, giving you both web and API endpoints for your
+models with as little as one line in an array.
 
-You can add validation and some other stuff like readonly/inclusion/exclusion
-declarations in the config as well. You should be able to get simple crud up and
-running in a few minutes. ~Right now it just uses the `web` middleware, but I'll
-add the ability to add your own middleware, and add api middleware automatically
-in the future.~ *You can now inject middleware to the web and api routes, and
-the api routes are there automatically. (There might not be proper json error
-responses yet)* Probably a good idea to take a look through the config file that
-gets published to get an idea on how that works.
+The intent of Laravel Crud is for rapid prototyping. All you need for your
+complete CRUD operation set is a model and corresponding database table. The
+properties and their types are read from the database and the appropriate UI
+controlls are rendered in the web UIs.
 
-Oh, and the properties are all read from the db schema the sameish way
-Eloquent does. Also, you can publish the views if you like and mess around with
-those. You also can create copies of any views in your `views` directory under
-singular-downcase version of the model name (example `car`) and it will pick
-your custom ones first. Of course when you publish the views it will put them
-all under `crud`, those are the generic ones that apply to all models when they
-don't have a custom version of the given view.  
+## Installation
 
-### Update
-You can now generate crud views, controllers, and api controllers with a
-command. `php artisan crud:publish` will (without options) create crud views,
-crud web and api controllers, suggest web and api route resources to add, and
-recommend the removal of configs from the crud config file (so you're not
-redeclaring the same routes and stuff). You can pass `--model` to specify which
-model(s) you want to create components (controllers, views) for. You can pass
-multiple (example: `--model=Car --model=House`). The model(s) do need to be
-declared in your crud config or they'll be ignored. You can (and probably
-should) use the full namespace (`--model=App\Car`) but if everything is in the
-same space, you'll be ok to omit it. It's also case insensitive. You can also
-pass `--type` to specify the thing(s) you want to publish, controllers, api
-controllers, and/or views. Again, you can provide multiple options, but note
-that the `type` and the `model` options are processed together, so each `type`
-option will apply to all of the provided models. Here are the type options:
-* `controller` - this will create a web controller under `Http/Controllers`.
-* `api.controller` - this will create an API controller under
-`Http/Controllers/Api`.
-* `view` - this will create all crud views, as well as the main crud layout
-parent template.
-* `view.create`, `view.show`, `view.edit`, `view.index` - this will create the
-respective crud templates.  
+In its alpha state, Laravel Crud is currently not available on Packagist and is
+only available directly from the GitHub repository.
 
-_Note regarding pluralization and punctuation:_ All non-alphanumeric characters
-are stripped as part of the parsing process. Likewise, English pluralization is
-accounted for and in the case of specific view templates, the word order is
-irrelevant. Therefor, `CONTROLLERS` will act as `controller`; `API:controller`
-will act as `api.controller`; `Views` will act as `view`; `Create.View`,
-`viewcreate`, `view-CREATE` will all act as `view.create`.
+Edit the `repositories` node of your composer.json file.
 
-### Installation
-1. Add my github to the `repositories` section of your composer.json. You might
-not have this section yet and need to create it.
-```
+```(json)
 "repositories": [
     {
         "type": "vcs",
@@ -73,15 +32,163 @@ not have this section yet and need to create it.
     }
 ]
 ```
-2. Composer install my package (`composer require webbtj/crud`);
-3. Publish the config file (`php artisan vendor:publish`, select `crud-config`)
-4. Edit the newly published `config/crud.php` file to include whatever models
-you want.
 
-### TODO
-* [ ] Better documentation
-* [ ] Testing
-* [x] Allow users to inject middleware
-* [x] API routing
-* [x] Command to build _real_ controllers
-* [x] Command to build _real_ views
+Next, install the package.
+
+```(bash)
+composer require webbtj/crud
+```
+
+## Usage
+
+Once installed you'll want to publish a config file to edit.
+
+```(bash)
+php artisan vendor:publish
+```
+
+When prompted, select `crud-config`. This will create `config/crud.php` where
+you can define the models you want crud functionality generated for.
+
+## Configuration
+
+You can list any models you want crud functionality for in the `config/crud.php`
+configuration file. This file returns an array, each element in the array can be
+either a string naming a model, or an array with additional configuration
+options such as which fields are read only, excluded from certain views, and
+even validation. When specifying the model name, you can include the full
+namespace of the model (`App\Employee`) or simply the name of the class itself
+(`Employee`). The model name is also case-insensitive.
+
+Example configuration file:
+
+```(php)
+return [
+    'models' => [
+        // Add your model class names here (full namespace)
+        // Exmaple: "App\\Employee"
+
+        "App\\SmallChild", // a string that will create all routing and views
+                           // for the model with all defaults.
+
+        [
+            'model' => "App\\FastCar", // specify the model with extra configs
+            'index' => [
+                'exclude' => ['created_at'], // don't show this property in the
+                                             // index view
+            ],
+            'store' => [
+                'validation' => [ // run this validation on the "store" method
+                    'year' => 'required'
+                ],
+            ],
+        ],
+
+        [
+            'model' => "App\\Employee",
+            'show' => [
+                'exclude' => ['sample_text', 'sample_string'],
+            ],
+            'edit' => [
+                'exclude' => ['sample_longText'],
+                'readonly' => ['sample_char'], // in the edit interface, show
+                                               // this property but make it
+                                               // read only
+            ],
+            'create' => [
+                'exclude' => ['sample_text'],
+                'include' => ['updated_at'], // include this property in the
+                                             // create interface (it's normally
+                                             // not included)
+                'readonly' => ['sample_integer'],
+            ],
+            'index' => [
+                'include' => [
+                    'id', 'first_name', 'last_name', 'email', 'sample_json',
+                    'sample_jsonb', 'sample_enum', 'sample_set', 'enabled'
+                ],
+            ],
+            'update' => [
+                'validation' => [
+                    'first_name' => 'required',
+                    'last_name' => 'required',
+                ],
+            ]
+        ]
+    ]
+];
+```
+
+You can specify `include`, `exclude`, and `readonly` arrays of properties for
+each of the four standard views, `show`, `edit`, `create`, and `index`. You can
+also specify `include`, `exclude`, and `validation` arrays for each of the two
+standard methods, `store` and `update`. If you're specifying additional options
+in an array format, you must include the `model` definition as well.
+
+## Defaults
+
+While you have complete control over what fields are displayed and can be
+edited, there are defaults that the package will fall back to when you do not
+provide specifics. By default...
+
+* no validation is applied to any properties
+* `id`, `created_at`, and `updated_at` are not updateable via requests
+* each view will display all properties
+
+In all views except `index`, you will `exclude` fields you don't want displayed.
+If you want to customize the `index` view you will need to `include` each
+property.
+
+## Production
+
+But reading schemas for every interaction with a model, reading and parsing all
+of these inclusion, exclusion, read-only, and validation rules from a config,
+these are all pretty expensive operations and not really suited for production
+apps. That's why there's an artisan command to commit views and controllers to
+_your_ codebase for better performance and further development control.
+
+```(bash)
+php artisan crud:publish
+```
+
+The `crud:publish` artisan command will create a directory for the model in your
+`views` directory with `index`, `show`, `create`, and `edit` views. It will also
+create a web controller in your `Http/Controllers` directory and an API
+controller in your `Http/Controllers/Api` directory. Finally it will provide
+recommended code for adding the routes to your `web.php` and `api.php` routes
+files, and recommend that you now remove the publish model(s) from your
+`crud.php` config file.
+
+Of course you can customize and limit this publish with options. Provide
+`--model=` to speficfy the model you wish to publish. Omitting this option will
+publish all models. This option allows for multiple values simply by specifying
+it more than once
+(Example: `php artisan crud:publish --model=Employee --model=Car).
+
+You can also specify which elements you want published by specifying `--type=`.
+Like `--model=` this can be repeated to specify multiple types to publish. The
+valid types are as follows:
+
+* `controller` - publishes the web controller
+* `api.controller` - publishes the API controller
+* `views` - publishes all views
+* `view.index` - publishes just the index view
+* `view.show` - publishes just the show view
+* `view.create` - publishes just the create view
+* `view.edit` - publishes just the edit view
+
+Some notes on these options. They are case insensitive; all punctuation is
+stripped out (so `api.controller`, `api-controller`, and `apicontroller` all
+work); singular vs plural doesn't matter (English only); and the order of words
+for the specific views doesn't matter (`view.index` or `index.view`).
+
+## Roadmap
+
+* Unit testing
+* Beta release/release to Packagist.
+
+## Contributing
+
+Contributions are always welcome [on GitHub](https://github.com/webbtj/crud).
+Please open issues before submitting PRs and do tag the issue in your commit
+messages/PR description. Also, please adhere to PSR-2 as much as possible.
