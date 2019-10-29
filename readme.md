@@ -19,21 +19,7 @@ controlls are rendered in the web UIs.
 
 ## Installation
 
-In its alpha state, Laravel Crud is currently not available on Packagist and is
-only available directly from the GitHub repository.
-
-Edit the `repositories` node of your composer.json file.
-
-```(json)
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/webbtj/crud"
-    }
-]
-```
-
-Next, install the package.
+Install via composer.
 
 ```(bash)
 composer require webbtj/crud
